@@ -97,12 +97,12 @@ container_name = "triton_server"
 
 # Note: The :z flag on the volume mount is necessary for systems with SELinux (like Fedora/RHEL)
 subprocess.call(
-    f"{runtime} run -d --rm --name {container_name} {gpu_flags} -v {triton_repo_path.absolute()}:/models:z -p 8000:8000 {tag} tritonserver --model-repository=/models",
+    f"{runtime} run -d --rm --name {container_name} {gpu_flags} -v {triton_repo_path.absolute()}:/models:z -p 8200:8000 {tag} tritonserver --model-repository=/models",
     shell=True,
 )
 
 # Wait for the Triton server to start
-triton_client = InferenceServerClient(url="127.0.0.1:8000", verbose=False, ssl=False)
+triton_client = InferenceServerClient(url="0.0.0.0:8200", verbose=False, ssl=False)
 
 # Wait until model is ready
 for _ in range(10):
